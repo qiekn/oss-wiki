@@ -1,7 +1,7 @@
 # Order of the Sinking Star 
 
 `cn`: 沉星骑士团  
-`jp`: 沈みゆく星の騎士団
+`jp`: 沈みゆく星の騎士団 (結社)
 
 Wiki-like notes of Order of the Sinking Star. (currently working in progress)
 
