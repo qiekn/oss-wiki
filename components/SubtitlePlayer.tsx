@@ -61,22 +61,31 @@ export default function SubtitlePlayer({ entry }: SubtitlePlayerProps) {
     }
 
     let probed = false;
+    let durationSet = false;
 
+    // Lock the duration to the first finite value. Re-reading it on every
+    // `durationchange` is what made the end time creep upward: dragging to the
+    // end nudges the browser to refine an OGG's estimated length, which would
+    // otherwise feed straight back into the scrubber's max.
     const syncDuration = () => {
+      if (durationSet) {
+        return;
+      }
       const d = audio.duration;
       if (Number.isFinite(d) && d > 0) {
+        durationSet = true;
         setDuration(d);
         return;
       }
-      // Many OGG files report duration === Infinity until the browser reads to
-      // the end. Seek far past the end once to force it to resolve the real
-      // length, then jump back to the start.
+      // Some OGG files report duration === Infinity until the browser reads to
+      // the end. Seek far past the end once to force it to resolve.
       if (!probed) {
         probed = true;
         const onProbe = () => {
           audio.removeEventListener("timeupdate", onProbe);
           audio.currentTime = 0;
-          if (Number.isFinite(audio.duration)) {
+          if (Number.isFinite(audio.duration) && audio.duration > 0) {
+            durationSet = true;
             setDuration(audio.duration);
           }
         };
@@ -163,7 +172,21 @@ export default function SubtitlePlayer({ entry }: SubtitlePlayerProps) {
       {/* Floating control: overlaid in the top-left corner, does not take a
           row in the flow, so the subtitle text below is never pushed down. */}
       <div className="absolute left-4 top-4 z-10">
-        <div className="group inline-flex items-center rounded-full transition-colors hover:bg-black/40 hover:backdrop-blur-sm focus-within:bg-black/40 focus-within:backdrop-blur-sm">
+        <div
+          className="group inline-flex items-center rounded-full transition-colors hover:bg-black/40 hover:backdrop-blur-sm focus-within:bg-black/40 focus-within:backdrop-blur-sm"
+          onMouseLeave={(event) => {
+            // Clicking play or dragging the scrubber leaves the control focused,
+            // so focus-within would keep the panel open until you click away.
+            // Drop focus when the pointer leaves so it collapses on mouse-out.
+            const active = document.activeElement;
+            if (
+              active instanceof HTMLElement &&
+              event.currentTarget.contains(active)
+            ) {
+              active.blur();
+            }
+          }}
+        >
           <button
             type="button"
             onClick={togglePlay}
