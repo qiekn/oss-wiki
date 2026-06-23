@@ -41,3 +41,70 @@ body {
   letter-spacing: 0.01em;
   text-align: center;
 }
+
+/* Custom audio scrubber in SubtitlePlayer */
+.subtitle-audio-range {
+  -webkit-appearance: none;
+  appearance: none;
+  accent-color: #f5f1f3; /* monochrome fallback, never the native blue */
+  height: 16px; /* generous hit area for dragging */
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+/* WebKit / Blink: fill the played portion via a gradient driven by --progress */
+.subtitle-audio-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    #f5f1f3 var(--progress, 0%),
+    rgba(255, 255, 255, 0.18) var(--progress, 0%)
+  );
+}
+
+.subtitle-audio-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -5px; /* center the 14px thumb on the 4px track */
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: #f5f1f3;
+  transition: transform 0.1s ease;
+}
+
+.subtitle-audio-range:hover::-webkit-slider-thumb {
+  transform: scale(1.12);
+}
+
+.subtitle-audio-range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+/* Firefox: native progress fill */
+.subtitle-audio-range::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.subtitle-audio-range::-moz-range-progress {
+  height: 4px;
+  border-radius: 2px;
+  background: #f5f1f3;
+}
+
+.subtitle-audio-range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: none;
+  border-radius: 9999px;
+  background: #f5f1f3;
+  transition: transform 0.1s ease;
+}
+
+.subtitle-audio-range:hover::-moz-range-thumb {
+  transform: scale(1.12);
+}
