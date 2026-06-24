@@ -25,9 +25,6 @@ subtitles:
 
 We need to match the subtitle IDs (`warrior_heroes1_start`, `warrior_heroes1_start_end`) manually. You can compare them with gameplay videos and check the corresponding entries in en.subtitles.
 
-> Currently, the maintainer of this repository is working on the northern region, The Hearty Heroes of Hauling. Contributions for the eastern region, The Mirror Isles, would be greatly appreciated.
-
-
 ## Credits
 
 - [https://github.com/joric/ootss](https://github.com/joric/ootss/tree/main/images/levels) (for level preview images)
